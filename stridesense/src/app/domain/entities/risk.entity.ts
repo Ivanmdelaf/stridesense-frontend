@@ -13,3 +13,10 @@ export interface RiskSummary {
   factors: RiskFactor[];
   generatedAt: string;
 }
+
+// export interface RiskPrediction {
+//   riskLevel: 0 | 1 | 2;
+//   scoreVector: number[];
+//   createdAt: Date;
+// }
+

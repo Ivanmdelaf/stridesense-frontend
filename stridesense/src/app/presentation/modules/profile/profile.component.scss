@@ -1,0 +1,88 @@
+.profile {
+  padding: 2rem;
+  max-width: 560px;
+
+  > a {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #6366f1;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.user-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #6366f1;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+
+  dt {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280;
+    align-self: center;
+  }
+
+  dd {
+    font-size: 0.95rem;
+    color: #111827;
+    margin: 0;
+  }
+}
+
+.btn-danger {
+  padding: 0.625rem 1.25rem;
+  background-color: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #dc2626;
+  }
+}

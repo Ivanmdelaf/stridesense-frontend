@@ -1,0 +1,71 @@
+.sessions-list {
+  padding: 2rem;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  .btn-primary {
+    padding: 0.5rem 1rem;
+    background-color: #6366f1;
+    color: #fff;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #4f46e5;
+    }
+  }
+
+  .error {
+    color: #ef4444;
+  }
+
+  .sessions {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.session-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .sport {
+    font-weight: 600;
+    min-width: 90px;
+    color: #6366f1;
+  }
+
+  .date, .duration, .distance {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+}

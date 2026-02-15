@@ -1,12 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AuthCredentials, AuthToken, User } from '../../entities/user.entity';
+import { Observable, switchMap, tap } from 'rxjs';
+import { AuthCredentials, User } from '../../entities/user.entity';
 import { IUserRepository, USER_REPOSITORY } from '../../repositories/user.repository';
-
-export interface LoginResult {
-  token: AuthToken;
-  user: User;
-}
 
 @Injectable({ providedIn: 'root' })
 export class LoginUseCase {
@@ -14,9 +9,13 @@ export class LoginUseCase {
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository
   ) {}
 
-  execute(_credentials: AuthCredentials): Observable<User> {
-    // La autenticación real se delega al datasource via repositorio.
-    // El use-case orquesta: llamar al repo y devolver el perfil del usuario.
-    return this.userRepository.getProfile();
+  execute(credentials: AuthCredentials): Observable<User> {
+    return this.userRepository.login(credentials).pipe(
+      tap((token) => {
+        localStorage.setItem('accessToken', token.accessToken);
+        localStorage.setItem('refreshToken', token.refreshToken);
+      }),
+      switchMap(() => this.userRepository.getProfile())
+    );
   }
 }

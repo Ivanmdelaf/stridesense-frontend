@@ -13,3 +13,11 @@ export class GetSessionsUseCase {
     return this.sessionRepository.getAll();
   }
 }
+
+// export class GetSessionsUseCase {
+//   constructor(private repo: SessionRepository) {}
+
+//   execute(userId: number) {
+//     return this.repo.getSessions(userId);
+//   }
+// }

@@ -1,0 +1,35 @@
+<div class="dashboard">
+  <header class="dashboard-header">
+    <h1>Bienvenido, {{ (user$ | async)?.name ?? 'Atleta' }}</h1>
+  </header>
+
+  <div class="dashboard-grid">
+
+    <!-- Sesiones -->
+    <div class="card">
+      <h2>Sesiones</h2>
+      @if (sessionsLoading$ | async) {
+        <p>Cargando...</p>
+      } @else {
+        <p class="stat">{{ (sessions$ | async)?.length ?? 0 }}</p>
+        <span>sesiones registradas</span>
+      }
+      <a routerLink="/sessions">Ver todas</a>
+    </div>
+
+    <!-- Riesgo -->
+    <div class="card">
+      <h2>Nivel de Riesgo</h2>
+      @if (riskLoading$ | async) {
+        <p>Cargando...</p>
+      } @else if (riskSummary$ | async; as risk) {
+        <p class="stat risk-{{ risk.overallLevel }}">{{ risk.overallLevel | uppercase }}</p>
+        <span>Puntuación: {{ risk.overallScore }}</span>
+      } @else {
+        <p>Sin datos de riesgo</p>
+      }
+      <a routerLink="/risk">Ver detalle</a>
+    </div>
+
+  </div>
+</div>

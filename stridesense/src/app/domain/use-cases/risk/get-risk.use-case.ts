@@ -13,3 +13,12 @@ export class GetRiskUseCase {
     return this.riskRepository.getSummary();
   }
 }
+
+
+// export class GetRiskUseCase {
+//   constructor(private repo: RiskRepository) {}
+
+//   execute(input: any) {
+//     return this.repo.getRisk(input);
+//   }
+// }

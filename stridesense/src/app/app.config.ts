@@ -1,6 +1,7 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { provideStore } from '@ngxs/store';
 import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideStore(
       [UserState, SessionsState, RiskState],
       withNgxsReduxDevtoolsPlugin()

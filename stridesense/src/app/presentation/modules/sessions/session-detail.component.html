@@ -1,0 +1,29 @@
+<div class="session-detail">
+  <a routerLink="/sessions">← Volver</a>
+
+  @if (loading$ | async) {
+    <p>Cargando...</p>
+  } @else if (session$ | async; as session) {
+    <h1>Sesión de {{ session.sport | uppercase }}</h1>
+
+    <dl class="details">
+      <dt>Fecha</dt>
+      <dd>{{ session.date | date:'dd/MM/yyyy' }}</dd>
+
+      <dt>Duración</dt>
+      <dd>{{ session.durationMinutes }} minutos</dd>
+
+      @if (session.distanceKm) {
+        <dt>Distancia</dt>
+        <dd>{{ session.distanceKm }} km</dd>
+      }
+
+      @if (session.notes) {
+        <dt>Notas</dt>
+        <dd>{{ session.notes }}</dd>
+      }
+    </dl>
+  } @else {
+    <p>Sesión no encontrada.</p>
+  }
+</div>

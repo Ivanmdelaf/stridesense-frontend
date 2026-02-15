@@ -16,3 +16,17 @@ export interface CreateSessionPayload {
   distanceKm?: number;
   notes?: string;
 }
+
+// export interface Session {
+//   id: number;
+//   userId: number;
+//   distanceKm: number;
+//   durationMin: number;
+//   avgHeartRate: number;
+//   cadence: number;
+//   elevationGain: number;
+//   rpe: number;
+//   sleepHours: number;
+//   createdAt: Date;
+// }
+

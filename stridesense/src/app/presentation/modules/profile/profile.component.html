@@ -1,0 +1,30 @@
+<div class="profile">
+  <a routerLink="/dashboard">← Dashboard</a>
+  <h1>Mi Perfil</h1>
+
+  @if (user$ | async; as user) {
+    <div class="user-card">
+      @if (user.avatarUrl) {
+        <img [src]="user.avatarUrl" [alt]="user.name" class="avatar" />
+      } @else {
+        <div class="avatar-placeholder">{{ user.name.charAt(0) }}</div>
+      }
+
+      <dl class="user-info">
+        <dt>Nombre</dt>
+        <dd>{{ user.name }}</dd>
+
+        <dt>Email</dt>
+        <dd>{{ user.email }}</dd>
+
+        <dt>Rol</dt>
+        <dd>{{ user.role }}</dd>
+      </dl>
+    </div>
+
+    <button class="btn-danger" (click)="logout()">Cerrar sesión</button>
+  } @else {
+    <p>No hay sesión activa.</p>
+    <a routerLink="/auth/login">Iniciar sesión</a>
+  }
+</div>

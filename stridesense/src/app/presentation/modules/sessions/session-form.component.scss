@@ -1,0 +1,78 @@
+.session-form {
+  padding: 2rem;
+  max-width: 540px;
+
+  > a {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #6366f1;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 0.625rem 0.875rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+
+      &:focus {
+        border-color: #6366f1;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+    }
+  }
+
+  .error {
+    color: #ef4444;
+    font-size: 0.875rem;
+  }
+
+  button {
+    padding: 0.75rem;
+    background-color: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #4f46e5;
+    }
+  }
+}

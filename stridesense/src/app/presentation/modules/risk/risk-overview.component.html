@@ -1,0 +1,34 @@
+<div class="risk-overview">
+  <a routerLink="/dashboard">← Dashboard</a>
+  <h1>Evaluación de Riesgo</h1>
+
+  @if (loading$ | async) {
+    <p>Calculando riesgo...</p>
+  } @else if (error$ | async; as error) {
+    <p class="error">{{ error }}</p>
+  } @else if (summary$ | async; as summary) {
+
+    <div class="risk-summary">
+      <div class="overall risk-{{ summary.overallLevel }}">
+        <span class="level">{{ summary.overallLevel | uppercase }}</span>
+        <span class="score">{{ summary.overallScore }} / 100</span>
+      </div>
+      <p class="generated">Actualizado: {{ summary.generatedAt }}</p>
+    </div>
+
+    <h2>Factores de riesgo</h2>
+    <ul class="factors">
+      @for (factor of summary.factors; track factor.id) {
+        <li class="factor risk-{{ factor.level }}">
+          <span class="label">{{ factor.label }}</span>
+          <span class="score">{{ factor.score }}</span>
+          <span class="level">{{ factor.level | uppercase }}</span>
+        </li>
+      }
+    </ul>
+
+  } @else {
+    <p>No hay datos de riesgo disponibles.</p>
+    <button (click)="reload()">Calcular riesgo</button>
+  }
+</div>

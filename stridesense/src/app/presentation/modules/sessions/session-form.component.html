@@ -1,0 +1,43 @@
+<div class="session-form">
+  <a routerLink="/sessions">← Volver</a>
+  <h1>Nueva Sesión</h1>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="field">
+      <label for="sport">Deporte</label>
+      <select id="sport" [(ngModel)]="sport" name="sport" required>
+        <option value="running">Running</option>
+        <option value="cycling">Ciclismo</option>
+        <option value="swimming">Natación</option>
+        <option value="strength">Fuerza</option>
+        <option value="other">Otro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="date">Fecha</label>
+      <input id="date" type="date" [(ngModel)]="date" name="date" required />
+    </div>
+
+    <div class="field">
+      <label for="duration">Duración (minutos)</label>
+      <input id="duration" type="number" [(ngModel)]="durationMinutes" name="duration" min="1" required />
+    </div>
+
+    <div class="field">
+      <label for="distance">Distancia (km, opcional)</label>
+      <input id="distance" type="number" [(ngModel)]="distanceKm" name="distance" min="0" step="0.1" />
+    </div>
+
+    <div class="field">
+      <label for="notes">Notas (opcional)</label>
+      <textarea id="notes" [(ngModel)]="notes" name="notes" rows="3"></textarea>
+    </div>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <button type="submit">Guardar sesión</button>
+  </form>
+</div>

@@ -9,3 +9,8 @@ export interface ISessionRepository {
   create(payload: CreateSessionPayload): Observable<Session>;
   delete(id: string): Observable<void>;
 }
+
+// export abstract class SessionRepository {
+//   abstract getSessions(userId: number): Promise<Session[]>;
+//   abstract createSession(session: Session): Promise<Session>;
+// }

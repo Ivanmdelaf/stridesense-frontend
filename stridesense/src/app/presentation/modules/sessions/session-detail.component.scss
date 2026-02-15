@@ -1,0 +1,40 @@
+.session-detail {
+  padding: 2rem;
+  max-width: 640px;
+
+  > a {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #6366f1;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0.75rem 1rem;
+
+    dt {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #6b7280;
+      align-self: center;
+    }
+
+    dd {
+      font-size: 1rem;
+      color: #111827;
+      margin: 0;
+    }
+  }
+}
