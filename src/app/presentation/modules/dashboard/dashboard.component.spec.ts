@@ -2,23 +2,29 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideStore, Store } from '@ngxs/store';
 import { DashboardComponent } from './dashboard.component';
-import { UserState, SetUser } from '../../state/user.state';
+import { UserState } from '../../state/user.state';
 import { SessionsState, SetSessions } from '../../state/sessions.state';
 import { RiskState, SetRisk } from '../../state/risk.state';
-import { User } from '../../../domain/entities/user.entity';
 import { Session } from '../../../domain/entities/session.entity';
 import { RiskSummary } from '../../../domain/entities/risk.entity';
+import { USER_REPOSITORY } from '../../../domain/repositories/user.repository';
 
-const mockUser: User = { id: '1', name: 'Ivan', email: 'i@t.com', role: 'athlete', avatarUrl: null };
+const mockRepo = {
+  login: vi.fn(),
+  register: vi.fn(),
+  getProfile: vi.fn(),
+  updateProfile: vi.fn(),
+};
 
 const mockSessions: Session[] = [
-  { id: 's1', date: '2026-02-15', durationMinutes: 30, sport: 'running', distanceKm: 5, notes: null },
-  { id: 's2', date: '2026-02-14', durationMinutes: 45, sport: 'cycling', distanceKm: 15, notes: null },
+  { id: 's1', date: '2026-02-15', durationMinutes: 44, sport: 'running', distanceKm: 8.2, avgHeartRate: 158, cadenceSpm: 174, notes: null },
+  { id: 's2', date: '2026-02-14', durationMinutes: 60, sport: 'cycling', distanceKm: 25, avgHeartRate: 140, cadenceSpm: 85, notes: null },
+  { id: 's3', date: '2026-02-10', durationMinutes: 30, sport: 'running', distanceKm: 5, avgHeartRate: 145, cadenceSpm: 170, notes: null },
 ];
 
 const mockRisk: RiskSummary = {
-  overallScore: 40,
-  overallLevel: 'low',
+  overallScore: 62,
+  overallLevel: 'medium',
   factors: [],
   generatedAt: '2026-02-15T10:00:00Z',
 };
@@ -34,6 +40,7 @@ describe('DashboardComponent', () => {
       providers: [
         provideStore([UserState, SessionsState, RiskState]),
         provideRouter([]),
+        { provide: USER_REPOSITORY, useValue: mockRepo },
       ],
     }).compileComponents();
 
@@ -47,27 +54,15 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show default greeting when no user', () => {
-    const h1 = fixture.nativeElement.querySelector('h1');
-    expect(h1.textContent).toContain('Atleta');
+  it('should render the brand header', () => {
+    const brand = fixture.nativeElement.querySelector('.brand-name');
+    expect(brand).toBeTruthy();
+    expect(brand.textContent.trim()).toBe('StrideSense');
   });
 
-  it('should show user name when user is set', async () => {
-    store.dispatch(new SetUser(mockUser));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const h1 = fixture.nativeElement.querySelector('h1');
-    expect(h1.textContent).toContain('Ivan');
-  });
-
-  it('should show session count when sessions loaded', async () => {
-    store.dispatch(new SetSessions(mockSessions));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const stat = fixture.nativeElement.querySelector('.stat');
-    expect(stat.textContent.trim()).toBe('2');
+  it('should render the risk card', () => {
+    const riskCard = fixture.nativeElement.querySelector('.risk-card');
+    expect(riskCard).toBeTruthy();
   });
 
   it('should show risk level when risk loaded', async () => {
@@ -75,8 +70,60 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const riskEl = fixture.nativeElement.querySelector('.risk-low');
-    expect(riskEl).toBeTruthy();
+    const level = fixture.nativeElement.querySelector('.risk-card__level');
+    expect(level).toBeTruthy();
+    expect(level.textContent.trim()).toBe('medium');
+    expect(level.classList.contains('risk-medium')).toBe(true);
+  });
+
+  it('should show risk score percentage', async () => {
+    store.dispatch(new SetRisk(mockRisk));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const score = fixture.nativeElement.querySelector('.risk-card__score');
+    expect(score.textContent).toContain('62%');
+  });
+
+  it('should render donut chart with correct stroke', async () => {
+    store.dispatch(new SetRisk(mockRisk));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const circles = fixture.nativeElement.querySelectorAll('.donut circle');
+    expect(circles.length).toBe(2);
+  });
+
+  it('should show latest session metrics when sessions loaded', async () => {
+    store.dispatch(new SetSessions(mockSessions));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const values = fixture.nativeElement.querySelectorAll('.recent-session .metric-item__value');
+    expect(values.length).toBe(3);
+    expect(values[0].textContent.trim()).toBe('8.2');
+    expect(values[1].textContent.trim()).toBe('44');
+    expect(values[2].textContent.trim()).toBe('158');
+  });
+
+  it('should render key metrics section', () => {
+    const keyMetrics = fixture.nativeElement.querySelector('.key-metrics');
+    expect(keyMetrics).toBeTruthy();
+  });
+
+  it('should compute latestSession from first session', () => {
+    store.dispatch(new SetSessions(mockSessions));
+    expect(component.latestSession()?.id).toBe('s1');
+  });
+
+  it('should compute avgCadence from sessions with cadence', () => {
+    store.dispatch(new SetSessions(mockSessions));
+    const avg = component.avgCadence();
+    expect(avg).toBe(Math.round((174 + 85 + 170) / 3));
+  });
+
+  it('should return null avgCadence when no sessions', () => {
+    expect(component.avgCadence()).toBeNull();
   });
 
   it('should dispatch LoadSessions and LoadRisk on init', () => {

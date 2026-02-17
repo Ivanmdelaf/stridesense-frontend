@@ -6,8 +6,8 @@ import { SessionsState, SetSessions, SetSessionsError } from '../../state/sessio
 import { Session } from '../../../domain/entities/session.entity';
 
 const mockSessions: Session[] = [
-  { id: 's1', date: '2026-02-15', durationMinutes: 30, sport: 'running', distanceKm: 5, notes: null },
-  { id: 's2', date: '2026-02-14', durationMinutes: 60, sport: 'cycling', distanceKm: null, notes: 'Easy ride' },
+  { id: 's1', date: '2026-02-15', durationMinutes: 30, sport: 'running', distanceKm: 5, avgHeartRate: 150, cadenceSpm: 170, notes: null },
+  { id: 's2', date: '2026-02-14', durationMinutes: 60, sport: 'cycling', distanceKm: null, avgHeartRate: null, cadenceSpm: null, notes: 'Easy ride' },
 ];
 
 describe('SessionsListComponent', () => {

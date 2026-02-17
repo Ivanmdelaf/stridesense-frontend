@@ -5,7 +5,7 @@ import { SESSION_REPOSITORY } from '../../repositories/session.repository';
 import { Session, CreateSessionPayload } from '../../entities/session.entity';
 
 const payload: CreateSessionPayload = { date: '2026-02-15', durationMinutes: 45, sport: 'swimming', distanceKm: 2 };
-const createdSession: Session = { id: 'new-1', ...payload, notes: null };
+const createdSession: Session = { id: 'new-1', ...payload, avgHeartRate: null, cadenceSpm: null, notes: null };
 
 describe('CreateSessionUseCase', () => {
   let useCase: CreateSessionUseCase;

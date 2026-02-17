@@ -1,62 +1,203 @@
 .dashboard {
-  padding: 2rem;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+}
 
-  &-header {
-    margin-bottom: 2rem;
+// ── Brand Header ──
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 1.5rem;
 
-    h1 {
-      font-size: 1.75rem;
-    }
+  &-logo {
+    width: 36px;
+    height: 36px;
   }
 
-  &-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
+  &-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
   }
 }
 
-.card {
+// ── Risk Card ──
+.risk-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+
+    h2 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__level {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin: 0;
+  }
+
+  &__score {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+}
+
+// ── Donut Chart ──
+.donut {
+  position: relative;
+  width: 140px;
+  height: 140px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+  }
+}
+
+// ── Risk Level Colors ──
+.risk-low    { color: var(--risk-low); }
+.risk-medium { color: var(--risk-medium); }
+.risk-high   { color: var(--risk-high); }
+
+// ── Metrics Row ──
+.metrics-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.metric-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  h3 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.75rem;
+  }
+
+  &__values {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    &--vertical {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+}
+
+// ── Recent Session Metrics ──
+.metric-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  background-color: #fff;
+  align-items: center;
+  gap: 0.125rem;
 
-  h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .stat {
-    font-size: 2.5rem;
+  &__value {
+    font-size: 1.25rem;
     font-weight: 700;
+    color: var(--color-text);
     line-height: 1;
-    color: #111827;
   }
 
-  span {
-    font-size: 0.875rem;
-    color: #6b7280;
+  &__unit {
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
   }
 
-  a {
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    color: #6366f1;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
+  &__label {
+    font-size: 0.65rem;
+    color: var(--color-text-secondary);
   }
 }
 
-.risk-low    { color: #16a34a; }
-.risk-medium { color: #d97706; }
-.risk-high   { color: #dc2626; }
+// ── Key Metrics Rows ──
+.metric-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+
+    &--green {
+      background-color: var(--risk-low);
+    }
+
+    &--teal {
+      background-color: #2ec4b6;
+    }
+  }
+
+  &__value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+}
+
+// ── Loading ──
+.loading-text {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 1rem 0;
+  margin: 0;
+}

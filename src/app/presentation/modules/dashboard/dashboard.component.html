@@ -1,35 +1,98 @@
 <div class="dashboard">
-  <header class="dashboard-header">
-    <h1>Bienvenido, {{ (user$ | async)?.name ?? 'Atleta' }}</h1>
+  <!-- Brand Header -->
+  <header class="brand">
+    <svg class="brand-logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="20" fill="#e8f8f5"/>
+      <path d="M22 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-4.5 7.5 2-4.5h5l2 4.5-3 3.5v6h-3v-6l-3-3.5Z"
+            fill="#2ec4b6" stroke="#2ec4b6" stroke-width="0.5" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-name">StrideSense</span>
   </header>
 
-  <div class="dashboard-grid">
-
-    <!-- Sesiones -->
-    <div class="card">
-      <h2>Sesiones</h2>
-      @if (sessionsLoading$ | async) {
-        <p>Cargando...</p>
-      } @else {
-        <p class="stat">{{ (sessions$ | async)?.length ?? 0 }}</p>
-        <span>sesiones registradas</span>
-      }
-      <a routerLink="/sessions">Ver todas</a>
+  <!-- Risk Card -->
+  <section class="risk-card" routerLink="/risk">
+    <div class="risk-card__header">
+      <h2>Current Risk</h2>
     </div>
 
-    <!-- Riesgo -->
-    <div class="card">
-      <h2>Nivel de Riesgo</h2>
-      @if (riskLoading$ | async) {
-        <p>Cargando...</p>
-      } @else if (riskSummary$ | async; as risk) {
-        <p class="stat risk-{{ risk.overallLevel }}">{{ risk.overallLevel | uppercase }}</p>
-        <span>Puntuación: {{ risk.overallScore }}</span>
+    @if (riskLoading()) {
+      <div class="risk-card__body">
+        <p class="loading-text">Cargando...</p>
+      </div>
+    } @else if (riskSummary(); as risk) {
+      <div class="risk-card__body">
+        <div class="donut">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#e8e8e8" stroke-width="10"/>
+            <circle cx="60" cy="60" r="54"
+                    fill="none"
+                    [attr.stroke]="riskColor()"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                    [attr.stroke-dasharray]="riskCircumference"
+                    [attr.stroke-dashoffset]="riskDashOffset()"
+                    transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="donut__icon">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm-3.5 6.5 1.5-3.5h4l1.5 3.5-2.5 3v5h-2.5v-5l-2-3Z"
+                    fill="#2ec4b6" stroke="#2ec4b6" stroke-width="0.3" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <p class="risk-card__level" [class]="'risk-' + risk.overallLevel">{{ risk.overallLevel }}</p>
+        <p class="risk-card__score">{{ risk.overallScore }}% effort</p>
+      </div>
+    } @else {
+      <div class="risk-card__body">
+        <p class="loading-text">Sin datos de riesgo</p>
+      </div>
+    }
+  </section>
+
+  <!-- Metrics Row -->
+  <div class="metrics-row">
+    <!-- Recent Session -->
+    <div class="metric-card recent-session" routerLink="/sessions">
+      <h3>Recent Session</h3>
+      @if (sessionsLoading()) {
+        <p class="loading-text">...</p>
+      } @else if (latestSession(); as session) {
+        <div class="metric-card__values">
+          <div class="metric-item">
+            <span class="metric-item__value">{{ session.distanceKm ?? '—' }}</span>
+            <span class="metric-item__unit">km</span>
+            <span class="metric-item__label">Distance</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-item__value">{{ session.durationMinutes }}</span>
+            <span class="metric-item__unit">min</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-item__value">{{ session.avgHeartRate ?? '—' }}</span>
+            <span class="metric-item__unit">bpm</span>
+          </div>
+        </div>
       } @else {
-        <p>Sin datos de riesgo</p>
+        <p class="loading-text">Sin sesiones</p>
       }
-      <a routerLink="/risk">Ver detalle</a>
     </div>
 
+    <!-- Key Metrics -->
+    <div class="metric-card key-metrics">
+      <h3>Key Metrics</h3>
+      <div class="metric-card__values metric-card__values--vertical">
+        <div class="metric-row">
+          <span class="metric-row__icon metric-row__icon--green"></span>
+          <span class="metric-row__value">{{ weeklyLoad() | number:'1.0-0' }}</span>
+          <span class="metric-row__label">Weekly load</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-row__icon metric-row__icon--teal"></span>
+          <span class="metric-row__value">{{ avgCadence() ?? '—' }}</span>
+          <span class="metric-row__label">spm</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

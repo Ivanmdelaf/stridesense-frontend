@@ -6,6 +6,8 @@ export interface Session {
   durationMinutes: number;
   sport: Sport;
   distanceKm: number | null;
+  avgHeartRate: number | null;
+  cadenceSpm: number | null;
   notes: string | null;
 }
 
@@ -14,19 +16,7 @@ export interface CreateSessionPayload {
   durationMinutes: number;
   sport: Sport;
   distanceKm?: number;
+  avgHeartRate?: number;
+  cadenceSpm?: number;
   notes?: string;
 }
-
-// export interface Session {
-//   id: number;
-//   userId: number;
-//   distanceKm: number;
-//   durationMin: number;
-//   avgHeartRate: number;
-//   cadence: number;
-//   elevationGain: number;
-//   rpe: number;
-//   sleepHours: number;
-//   createdAt: Date;
-// }
-
