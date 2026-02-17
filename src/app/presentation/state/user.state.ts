@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { tap, catchError } from 'rxjs';
 import { EMPTY } from 'rxjs';
-import { AuthCredentials, User } from '../../domain/entities/user.entity';
+import { AuthCredentials, RegisterCredentials, User } from '../../domain/entities/user.entity';
 import { LoginUseCase } from '../../domain/use-cases/auth/login.use-case';
+import { RegisterUseCase } from '../../domain/use-cases/auth/register.use-case';
 import { LogoutUseCase } from '../../domain/use-cases/auth/logout.use-case';
 
 // --- State model ---
@@ -17,6 +18,11 @@ export interface UserStateModel {
 export class Login {
   static readonly type = '[User] Login';
   constructor(public credentials: AuthCredentials) {}
+}
+
+export class Register {
+  static readonly type = '[User] Register';
+  constructor(public data: RegisterCredentials) {}
 }
 
 export class Logout {
@@ -55,6 +61,7 @@ export class SetUserError {
 export class UserState {
   constructor(
     private readonly loginUseCase: LoginUseCase,
+    private readonly registerUseCase: RegisterUseCase,
     private readonly logoutUseCase: LogoutUseCase
   ) {}
 
@@ -90,6 +97,24 @@ export class UserState {
         ctx.patchState({
           loading: false,
           error: err?.error?.message || 'Error al iniciar sesión',
+        });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(Register)
+  register(ctx: StateContext<UserStateModel>, action: Register) {
+    ctx.patchState({ loading: true, error: null });
+
+    return this.registerUseCase.execute(action.data).pipe(
+      tap((user) => {
+        ctx.patchState({ user, loading: false });
+      }),
+      catchError((err) => {
+        ctx.patchState({
+          loading: false,
+          error: err?.error?.message || 'Error al registrar usuario',
         });
         return EMPTY;
       })
