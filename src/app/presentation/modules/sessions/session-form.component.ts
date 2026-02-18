@@ -30,6 +30,8 @@ export class SessionFormComponent {
       date: this.date,
       durationMinutes: this.durationMinutes,
       distanceKm: this.distanceKm,
+      avgHeartRate: null,
+      cadenceSpm: null,
       notes: this.notes || null,
     };
 
