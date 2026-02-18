@@ -5,6 +5,14 @@ import { App } from './app';
 import { UserState } from './presentation/state/user.state';
 import { SessionsState } from './presentation/state/sessions.state';
 import { RiskState } from './presentation/state/risk.state';
+import { USER_REPOSITORY } from './domain/repositories/user.repository';
+
+const mockRepo = {
+  login: vi.fn(),
+  register: vi.fn(),
+  getProfile: vi.fn(),
+  updateProfile: vi.fn(),
+};
 
 describe('App (root component)', () => {
   beforeEach(async () => {
@@ -13,6 +21,7 @@ describe('App (root component)', () => {
       providers: [
         provideRouter([]),
         provideStore([UserState, SessionsState, RiskState]),
+        { provide: USER_REPOSITORY, useValue: mockRepo },
       ],
     }).compileComponents();
   });

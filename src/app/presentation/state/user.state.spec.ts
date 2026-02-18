@@ -8,6 +8,14 @@ import {
   SetUserLoading,
 } from './user.state';
 import { User } from '../../domain/entities/user.entity';
+import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
+
+const mockRepo = {
+  login: vi.fn(),
+  register: vi.fn(),
+  getProfile: vi.fn(),
+  updateProfile: vi.fn(),
+};
 
 const mockUser: User = {
   id: '1',
@@ -22,7 +30,10 @@ describe('UserState', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideStore([UserState])],
+      providers: [
+        provideStore([UserState]),
+        { provide: USER_REPOSITORY, useValue: mockRepo },
+      ],
     });
     store = TestBed.inject(Store);
   });

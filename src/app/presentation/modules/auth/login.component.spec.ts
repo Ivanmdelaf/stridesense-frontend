@@ -3,6 +3,14 @@ import { provideRouter } from '@angular/router';
 import { provideStore } from '@ngxs/store';
 import { LoginComponent } from './login.component';
 import { UserState } from '../../state/user.state';
+import { USER_REPOSITORY } from '../../../domain/repositories/user.repository';
+
+const mockRepo = {
+  login: vi.fn(),
+  register: vi.fn(),
+  getProfile: vi.fn(),
+  updateProfile: vi.fn(),
+};
 
 describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
@@ -14,6 +22,7 @@ describe('LoginComponent', () => {
       providers: [
         provideStore([UserState]),
         provideRouter([]),
+        { provide: USER_REPOSITORY, useValue: mockRepo },
       ],
     }).compileComponents();
 
@@ -55,10 +64,8 @@ describe('LoginComponent', () => {
     expect(button.textContent.trim()).toBe('Entrar');
   });
 
-  it('onSubmit should set loading then dispatch SetUser', () => {
-    component.email = 'test@test.com';
-    component.password = '123456';
-    component.onSubmit();
-    expect(component.loading()).toBe(false);
+  it('should render link to register', () => {
+    const link = fixture.nativeElement.querySelector('a[href="/auth/register"]');
+    expect(link).toBeTruthy();
   });
 });

@@ -5,13 +5,20 @@ import { USER_REPOSITORY } from '../../repositories/user.repository';
 import { User } from '../../entities/user.entity';
 
 const mockUser: User = { id: '1', name: 'Ivan', email: 'ivan@test.com', role: 'athlete', avatarUrl: null };
+const mockToken = { accessToken: 'token', refreshToken: 'refresh', expiresIn: 3600 };
 
 describe('LoginUseCase', () => {
   let useCase: LoginUseCase;
-  const mockRepo = { getProfile: vi.fn(), updateProfile: vi.fn() };
+  const mockRepo = {
+    login: vi.fn(),
+    register: vi.fn(),
+    getProfile: vi.fn(),
+    updateProfile: vi.fn(),
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockRepo.login.mockReturnValue(of(mockToken));
     mockRepo.getProfile.mockReturnValue(of(mockUser));
     TestBed.configureTestingModule({
       providers: [LoginUseCase, { provide: USER_REPOSITORY, useValue: mockRepo }],

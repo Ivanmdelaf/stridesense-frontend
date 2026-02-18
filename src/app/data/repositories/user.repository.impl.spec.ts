@@ -8,7 +8,7 @@ const mockUser: User = { id: '1', name: 'Test User', email: 'test@test.com', rol
 
 describe('UserRepositoryImpl', () => {
   let repo: UserRepositoryImpl;
-  const mockDatasource = { getProfile: vi.fn(), updateProfile: vi.fn(), login: vi.fn() };
+  const mockDatasource = { getProfile: vi.fn(), updateProfile: vi.fn(), login: vi.fn(), register: vi.fn() };
 
   beforeEach(() => {
     vi.clearAllMocks();
