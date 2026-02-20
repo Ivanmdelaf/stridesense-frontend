@@ -7,16 +7,16 @@ export interface RiskFactor {
   level: RiskLevel;
 }
 
+export interface MlPrediction {
+  score: number;
+  level: RiskLevel;
+}
+
 export interface RiskSummary {
   overallScore: number;
   overallLevel: RiskLevel;
   factors: RiskFactor[];
+  mlPrediction: MlPrediction;
   generatedAt: string;
 }
-
-// export interface RiskPrediction {
-//   riskLevel: 0 | 1 | 2;
-//   scoreVector: number[];
-//   createdAt: Date;
-// }
 

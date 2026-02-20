@@ -69,6 +69,15 @@
     color: var(--color-text-secondary);
     margin: 0;
   }
+
+  &__ml-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0;
+    opacity: 0.85;
+  }
 }
 
 // ── Donut Chart ──

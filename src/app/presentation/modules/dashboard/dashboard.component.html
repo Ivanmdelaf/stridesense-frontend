@@ -23,6 +23,7 @@
       <div class="risk-card__body">
         <div class="donut">
           <svg viewBox="0 0 120 120">
+            <!-- Outer ring: rule-based overall score -->
             <circle cx="60" cy="60" r="54" fill="none" stroke="#e8e8e8" stroke-width="10"/>
             <circle cx="60" cy="60" r="54"
                     fill="none"
@@ -32,6 +33,18 @@
                     [attr.stroke-dasharray]="riskCircumference"
                     [attr.stroke-dashoffset]="riskDashOffset()"
                     transform="rotate(-90 60 60)"/>
+            <!-- Inner ring: ML prediction score -->
+            @if (mlPrediction()) {
+              <circle cx="60" cy="60" r="40" fill="none" stroke="#e8e8e8" stroke-width="8"/>
+              <circle cx="60" cy="60" r="40"
+                      fill="none"
+                      [attr.stroke]="mlColor()"
+                      stroke-width="8"
+                      stroke-linecap="round"
+                      [attr.stroke-dasharray]="mlCircumference"
+                      [attr.stroke-dashoffset]="mlDashOffset()"
+                      transform="rotate(-90 60 60)"/>
+            }
           </svg>
           <div class="donut__icon">
             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,6 +55,9 @@
         </div>
         <p class="risk-card__level" [class]="'risk-' + risk.overallLevel">{{ risk.overallLevel }}</p>
         <p class="risk-card__score">{{ risk.overallScore }}% effort</p>
+        @if (mlPrediction(); as ml) {
+          <p class="risk-card__ml-badge" [class]="'risk-' + ml.level">ML · {{ ml.score }}%</p>
+        }
       </div>
     } @else {
       <div class="risk-card__body">

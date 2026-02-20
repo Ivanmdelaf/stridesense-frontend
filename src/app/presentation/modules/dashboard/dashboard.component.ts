@@ -53,6 +53,23 @@ export class DashboardComponent implements OnInit {
     return '#34c759';
   });
 
+  mlPrediction = computed(() => this.riskSummary()?.mlPrediction ?? null);
+
+  mlCircumference = 2 * Math.PI * 40;
+
+  mlDashOffset = computed<number>(() => {
+    const circumference = 2 * Math.PI * 40;
+    const score = this.riskSummary()?.mlPrediction?.score ?? 0;
+    return circumference - (circumference * score) / 100;
+  });
+
+  mlColor = computed<string>(() => {
+    const level = this.riskSummary()?.mlPrediction?.level;
+    if (level === 'high') return '#ff453a';
+    if (level === 'medium') return '#ffb836';
+    return '#34c759';
+  });
+
   ngOnInit(): void {
     this.store.dispatch([new LoadSessions(), new LoadRisk()]);
   }

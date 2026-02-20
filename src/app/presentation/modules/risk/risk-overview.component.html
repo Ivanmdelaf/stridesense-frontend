@@ -16,6 +16,14 @@
       <p class="generated">Actualizado: {{ summary.generatedAt }}</p>
     </div>
 
+    @if (summary.mlPrediction) {
+      <h2>Predicción ML</h2>
+      <div class="ml-prediction risk-{{ summary.mlPrediction.level }}">
+        <span class="level">{{ summary.mlPrediction.level | uppercase }}</span>
+        <span class="score">{{ summary.mlPrediction.score }} / 100</span>
+      </div>
+    }
+
     <h2>Factores de riesgo</h2>
     <ul class="factors">
       @for (factor of summary.factors; track factor.id) {
