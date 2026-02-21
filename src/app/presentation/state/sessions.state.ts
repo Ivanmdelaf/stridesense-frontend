@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { Session } from '../../domain/entities/session.entity';
+import { tap, catchError } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { Session, CreateSessionPayload } from '../../domain/entities/session.entity';
+import { CreateSessionUseCase } from '../../domain/use-cases/sessions/create-session.use-case';
+import { GetSessionsUseCase } from '../../domain/use-cases/sessions/get-sessions.use-case';
 
 // --- State model ---
 export interface SessionsStateModel {
@@ -22,7 +26,7 @@ export class SetSessions {
 
 export class AddSession {
   static readonly type = '[Sessions] Add Session';
-  constructor(public payload: Session) {}
+  constructor(public payload: CreateSessionPayload) {}
 }
 
 export class SelectSession {
@@ -51,6 +55,11 @@ export class SetSessionsError {
 })
 @Injectable()
 export class SessionsState {
+  constructor(
+    private readonly createSession: CreateSessionUseCase,
+    private readonly getSessions: GetSessionsUseCase,
+  ) {}
+
   @Selector()
   static sessions(state: SessionsStateModel): Session[] {
     return state.sessions;
@@ -72,8 +81,15 @@ export class SessionsState {
   }
 
   @Action(LoadSessions)
-  loadSessions(ctx: StateContext<SessionsStateModel>): void {
+  loadSessions(ctx: StateContext<SessionsStateModel>) {
     ctx.patchState({ loading: true, error: null });
+    return this.getSessions.execute().pipe(
+      tap((sessions) => ctx.patchState({ sessions, loading: false })),
+      catchError((err) => {
+        ctx.patchState({ error: err.message ?? 'Error loading sessions', loading: false });
+        return EMPTY;
+      }),
+    );
   }
 
   @Action(SetSessions)
@@ -82,9 +98,18 @@ export class SessionsState {
   }
 
   @Action(AddSession)
-  addSession(ctx: StateContext<SessionsStateModel>, action: AddSession): void {
-    const sessions = [...ctx.getState().sessions, action.payload];
-    ctx.patchState({ sessions });
+  addSession(ctx: StateContext<SessionsStateModel>, action: AddSession) {
+    ctx.patchState({ loading: true, error: null });
+    return this.createSession.execute(action.payload).pipe(
+      tap((session) => {
+        const sessions = [...ctx.getState().sessions, session];
+        ctx.patchState({ sessions, loading: false });
+      }),
+      catchError((err) => {
+        ctx.patchState({ error: err.message ?? 'Error creating session', loading: false });
+        return EMPTY;
+      }),
+    );
   }
 
   @Action(SelectSession)

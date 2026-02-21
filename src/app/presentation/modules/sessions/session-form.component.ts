@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AddSession } from '../../state/sessions.state';
-import { Session, Sport } from '../../../domain/entities/session.entity';
+import { Sport } from '../../../domain/entities/session.entity';
 
 @Component({
   selector: 'app-session-form',
@@ -24,18 +24,13 @@ export class SessionFormComponent {
   error = signal<string | null>(null);
 
   onSubmit(): void {
-    const newSession: Session = {
-      id: crypto.randomUUID(),
+    this.store.dispatch(new AddSession({
       sport: this.sport,
       date: this.date,
       durationMinutes: this.durationMinutes,
-      distanceKm: this.distanceKm,
-      avgHeartRate: null,
-      cadenceSpm: null,
-      notes: this.notes || null,
-    };
-
-    this.store.dispatch(new AddSession(newSession));
+      distanceKm: this.distanceKm ?? undefined,
+      notes: this.notes || undefined,
+    }));
     this.router.navigate(['/sessions']);
   }
 }
