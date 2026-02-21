@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { UserState, ClearUser } from '../../state/user.state';
+import { UserState, Logout } from '../../state/user.state';
 import { ClearSessions } from '../../state/sessions.state';
 import { ClearRisk } from '../../state/risk.state';
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ export class ProfileComponent {
   user$ = this.store.select(UserState.user);
 
   logout(): void {
-    this.store.dispatch([new ClearUser(), new ClearSessions(), new ClearRisk()]);
+    this.store.dispatch([new Logout(), new ClearSessions(), new ClearRisk()]);
     this.router.navigate(['/auth/login']);
   }
 }

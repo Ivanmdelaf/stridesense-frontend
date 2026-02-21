@@ -20,6 +20,32 @@
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
+    flex: 1;
+  }
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: #fee2e2;
+    color: #ef4444;
   }
 }
 

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
+import { tap, catchError, EMPTY } from 'rxjs';
 import { RiskLevel, RiskSummary } from '../../domain/entities/risk.entity';
+import { GetRiskUseCase } from '../../domain/use-cases/risk/get-risk.use-case';
 
 // --- State model ---
 export interface RiskStateModel {
@@ -39,6 +41,8 @@ export class SetRiskError {
 })
 @Injectable()
 export class RiskState {
+  constructor(private readonly getRiskUseCase: GetRiskUseCase) {}
+
   @Selector()
   static summary(state: RiskStateModel): RiskSummary | null {
     return state.summary;
@@ -60,8 +64,15 @@ export class RiskState {
   }
 
   @Action(LoadRisk)
-  loadRisk(ctx: StateContext<RiskStateModel>): void {
+  loadRisk(ctx: StateContext<RiskStateModel>) {
     ctx.patchState({ loading: true, error: null });
+    return this.getRiskUseCase.execute().pipe(
+      tap((summary) => ctx.patchState({ summary, loading: false })),
+      catchError((err) => {
+        ctx.patchState({ error: err.message ?? 'Error loading risk', loading: false });
+        return EMPTY;
+      }),
+    );
   }
 
   @Action(SetRisk)

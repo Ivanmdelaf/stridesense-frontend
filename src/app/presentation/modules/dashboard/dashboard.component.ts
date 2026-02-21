@@ -1,9 +1,10 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { SessionsState, LoadSessions } from '../../state/sessions.state';
-import { RiskState, LoadRisk } from '../../state/risk.state';
+import { Router, RouterLink } from '@angular/router';
+import { SessionsState, LoadSessions, ClearSessions } from '../../state/sessions.state';
+import { RiskState, LoadRisk, ClearRisk } from '../../state/risk.state';
+import { Logout } from '../../state/user.state';
 import { Session } from '../../../domain/entities/session.entity';
 
 @Component({
@@ -15,6 +16,7 @@ import { Session } from '../../../domain/entities/session.entity';
 })
 export class DashboardComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly router = inject(Router);
 
   sessions = this.store.selectSignal(SessionsState.sessions);
   sessionsLoading = this.store.selectSignal(SessionsState.loading);
@@ -69,6 +71,11 @@ export class DashboardComponent implements OnInit {
     if (level === 'medium') return '#ffb836';
     return '#34c759';
   });
+
+  logout(): void {
+    this.store.dispatch([new Logout(), new ClearSessions(), new ClearRisk()]);
+    this.router.navigate(['/auth/login']);
+  }
 
   ngOnInit(): void {
     this.store.dispatch([new LoadSessions(), new LoadRisk()]);
