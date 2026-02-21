@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Session, CreateSessionPayload } from '../entities/session.entity';
+import { Session, CreateSessionPayload, UpdateSessionPayload } from '../entities/session.entity';
 
 export const SESSION_REPOSITORY = 'SESSION_REPOSITORY';
 
@@ -7,6 +7,7 @@ export interface ISessionRepository {
   getAll(): Observable<Session[]>;
   getById(id: string): Observable<Session>;
   create(payload: CreateSessionPayload): Observable<Session>;
+  update(id: string, payload: UpdateSessionPayload): Observable<Session>;
   delete(id: string): Observable<void>;
 }
 

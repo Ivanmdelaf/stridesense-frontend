@@ -20,3 +20,13 @@ export interface CreateSessionPayload {
   cadenceSpm?: number;
   notes?: string;
 }
+
+export interface UpdateSessionPayload {
+  date?: string;
+  durationMinutes?: number;
+  sport?: Sport;
+  distanceKm?: number;
+  avgHeartRate?: number;
+  cadenceSpm?: number;
+  notes?: string;
+}

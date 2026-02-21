@@ -12,6 +12,11 @@ export const SESSIONS_ROUTES: Routes = [
       import('./session-form.component').then(m => m.SessionFormComponent),
   },
   {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./session-edit.component').then(m => m.SessionEditComponent),
+  },
+  {
     path: ':id',
     loadComponent: () =>
       import('./session-detail.component').then(m => m.SessionDetailComponent),

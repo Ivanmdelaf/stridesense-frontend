@@ -11,7 +11,7 @@ const mockSessions: Session[] = [
 
 describe('GetSessionsUseCase', () => {
   let useCase: GetSessionsUseCase;
-  const mockRepo = { getAll: vi.fn(), getById: vi.fn(), create: vi.fn(), delete: vi.fn() };
+  const mockRepo = { getAll: vi.fn(), getById: vi.fn(), create: vi.fn(), update: vi.fn(), delete: vi.fn() };
 
   beforeEach(() => {
     vi.clearAllMocks();

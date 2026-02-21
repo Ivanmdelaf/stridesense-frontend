@@ -151,6 +151,14 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
+  &.key-metrics {
+    cursor: default;
+
+    &:hover {
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+  }
+
   h3 {
     font-size: 0.8rem;
     font-weight: 600;
@@ -220,6 +228,12 @@
     font-size: 1.15rem;
     font-weight: 700;
     color: var(--color-text);
+
+    small {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+    }
   }
 
   &__label {

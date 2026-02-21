@@ -20,6 +20,8 @@ export class SessionFormComponent {
   date = new Date().toISOString().split('T')[0];
   durationMinutes = 30;
   distanceKm: number | null = null;
+  avgHeartRate: number | null = null;
+  cadenceSpm: number | null = null;
   notes = '';
   error = signal<string | null>(null);
 
@@ -29,6 +31,8 @@ export class SessionFormComponent {
       date: this.date,
       durationMinutes: this.durationMinutes,
       distanceKm: this.distanceKm ?? undefined,
+      avgHeartRate: this.avgHeartRate ?? undefined,
+      cadenceSpm: this.cadenceSpm ?? undefined,
       notes: this.notes || undefined,
     }));
     this.router.navigate(['/sessions']);

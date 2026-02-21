@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Session, CreateSessionPayload } from '../../domain/entities/session.entity';
+import { Session, CreateSessionPayload, UpdateSessionPayload } from '../../domain/entities/session.entity';
 
 @Injectable({ providedIn: 'root' })
 export class SessionDatasource {
@@ -19,6 +19,10 @@ export class SessionDatasource {
 
   create(payload: CreateSessionPayload): Observable<Session> {
     return this.http.post<Session>(this.base, payload);
+  }
+
+  update(id: string, payload: UpdateSessionPayload): Observable<Session> {
+    return this.http.patch<Session>(`${this.base}/${id}`, payload);
   }
 
   delete(id: string): Observable<void> {

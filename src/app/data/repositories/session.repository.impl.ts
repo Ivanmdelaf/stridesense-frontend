@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Session, CreateSessionPayload } from '../../domain/entities/session.entity';
+import { Session, CreateSessionPayload, UpdateSessionPayload } from '../../domain/entities/session.entity';
 import { ISessionRepository } from '../../domain/repositories/session.repository';
 import { SessionDatasource } from '../datasources/session.datasource';
 
@@ -18,6 +18,10 @@ export class SessionRepositoryImpl implements ISessionRepository {
 
   create(payload: CreateSessionPayload): Observable<Session> {
     return this.datasource.create(payload);
+  }
+
+  update(id: string, payload: UpdateSessionPayload): Observable<Session> {
+    return this.datasource.update(id, payload);
   }
 
   delete(id: string): Observable<void> {

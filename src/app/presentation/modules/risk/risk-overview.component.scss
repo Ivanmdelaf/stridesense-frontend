@@ -106,3 +106,68 @@
 .risk-low    { color: #16a34a; }
 .risk-medium { color: #d97706; }
 .risk-high   { color: #dc2626; }
+
+// ── Section header with info button ──
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0.75rem;
+
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.btn-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1.5px solid #6366f1;
+  border-radius: 50%;
+  background: transparent;
+  color: #6366f1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: #6366f1;
+    color: #fff;
+  }
+}
+
+// ── Legend panel ──
+.legend-panel {
+  background: #f8f9ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 0.625rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #374151;
+
+  .legend-title {
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: #1f2937;
+  }
+
+  p { margin: 0 0 0.5rem; }
+
+  ul {
+    margin: 0.25rem 0 0.5rem;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

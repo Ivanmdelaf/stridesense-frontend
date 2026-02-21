@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { tap, catchError } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
-import { Session, CreateSessionPayload } from '../../domain/entities/session.entity';
+import { Session, CreateSessionPayload, UpdateSessionPayload } from '../../domain/entities/session.entity';
 import { CreateSessionUseCase } from '../../domain/use-cases/sessions/create-session.use-case';
 import { GetSessionsUseCase } from '../../domain/use-cases/sessions/get-sessions.use-case';
+import { DeleteSessionUseCase } from '../../domain/use-cases/sessions/delete-session.use-case';
+import { UpdateSessionUseCase } from '../../domain/use-cases/sessions/update-session.use-case';
 
 // --- State model ---
 export interface SessionsStateModel {
@@ -34,6 +36,16 @@ export class SelectSession {
   constructor(public id: string) {}
 }
 
+export class UpdateSession {
+  static readonly type = '[Sessions] Update Session';
+  constructor(public id: string, public payload: UpdateSessionPayload) {}
+}
+
+export class DeleteSession {
+  static readonly type = '[Sessions] Delete Session';
+  constructor(public id: string) {}
+}
+
 export class ClearSessions {
   static readonly type = '[Sessions] Clear Sessions';
 }
@@ -58,6 +70,8 @@ export class SessionsState {
   constructor(
     private readonly createSession: CreateSessionUseCase,
     private readonly getSessions: GetSessionsUseCase,
+    private readonly deleteSession: DeleteSessionUseCase,
+    private readonly updateSession: UpdateSessionUseCase,
   ) {}
 
   @Selector()
@@ -102,11 +116,44 @@ export class SessionsState {
     ctx.patchState({ loading: true, error: null });
     return this.createSession.execute(action.payload).pipe(
       tap((session) => {
-        const sessions = [...ctx.getState().sessions, session];
+        const sessions = [...ctx.getState().sessions, session]
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         ctx.patchState({ sessions, loading: false });
       }),
       catchError((err) => {
         ctx.patchState({ error: err.message ?? 'Error creating session', loading: false });
+        return EMPTY;
+      }),
+    );
+  }
+
+  @Action(UpdateSession)
+  editSession(ctx: StateContext<SessionsStateModel>, action: UpdateSession) {
+    ctx.patchState({ loading: true, error: null });
+    return this.updateSession.execute(action.id, action.payload).pipe(
+      tap((updated) => {
+        const sessions = ctx.getState().sessions
+          .map(s => s.id === updated.id ? updated : s)
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        ctx.patchState({ sessions, loading: false });
+      }),
+      catchError((err) => {
+        ctx.patchState({ error: err.message ?? 'Error updating session', loading: false });
+        return EMPTY;
+      }),
+    );
+  }
+
+  @Action(DeleteSession)
+  removeSession(ctx: StateContext<SessionsStateModel>, action: DeleteSession) {
+    ctx.patchState({ loading: true, error: null });
+    return this.deleteSession.execute(action.id).pipe(
+      tap(() => {
+        const sessions = ctx.getState().sessions.filter(s => s.id !== action.id);
+        ctx.patchState({ sessions, loading: false });
+      }),
+      catchError((err) => {
+        ctx.patchState({ error: err.message ?? 'Error deleting session', loading: false });
         return EMPTY;
       }),
     );

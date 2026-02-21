@@ -23,14 +23,28 @@ export class DashboardComponent implements OnInit {
   riskSummary = this.store.selectSignal(RiskState.summary);
   riskLoading = this.store.selectSignal(RiskState.loading);
 
-  latestSession = computed<Session | null>(() => this.sessions()[0] ?? null);
+  latestSession = computed<Session | null>(() => {
+    const sorted = [...this.sessions()].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+    return sorted[0] ?? null;
+  });
 
   weeklyLoad = computed<number>(() => {
     const now = new Date();
     const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
     return this.sessions()
-      .filter(s => new Date(s.date) >= weekAgo && s.distanceKm != null)
-      .reduce((sum, s) => sum + (s.distanceKm ?? 0), 0);
+      .filter(s => new Date(s.date) >= weekAgo)
+      .reduce((sum, s) => sum + s.durationMinutes, 0);
+  });
+
+  weeklyLoadFormatted = computed<string>(() => {
+    const total = this.weeklyLoad();
+    const hours = Math.floor(total / 60);
+    const mins = total % 60;
+    if (hours === 0) return `${mins}min`;
+    if (mins === 0) return `${hours}h`;
+    return `${hours}h ${mins}min`;
   });
 
   avgCadence = computed<number | null>(() => {

@@ -40,9 +40,10 @@
 }
 
 .session-item {
+  display: flex;
+  align-items: center;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
-  cursor: pointer;
   transition: box-shadow 0.2s;
 
   &:hover {
@@ -53,6 +54,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex: 1;
     padding: 1rem 1.25rem;
     text-decoration: none;
     color: inherit;
@@ -67,5 +69,45 @@
   .date, .duration, .distance {
     font-size: 0.875rem;
     color: #6b7280;
+  }
+}
+
+.btn-delete,
+.btn-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.btn-delete {
+  margin-left: 0.25rem;
+
+  &:hover {
+    background: #fee2e2;
+    color: #ef4444;
+  }
+}
+
+.btn-edit {
+  margin-right: 0.5rem;
+
+  &:hover {
+    background: #ede9fe;
+    color: #6366f1;
   }
 }

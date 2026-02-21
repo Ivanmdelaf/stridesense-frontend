@@ -8,29 +8,68 @@
     <p class="error">{{ error }}</p>
   } @else if (summary$ | async; as summary) {
 
-    <div class="risk-summary">
-      <div class="overall risk-{{ summary.overallLevel }}">
-        <span class="level">{{ summary.overallLevel | uppercase }}</span>
-        <span class="score">{{ summary.overallScore }} / 100</span>
-      </div>
-      <p class="generated">Actualizado: {{ summary.generatedAt }}</p>
+    <!-- Evaluación general -->
+    <div class="section-header">
+      <h2>Resultado general</h2>
+      <button class="btn-info" (click)="showRiskLegend = !showRiskLegend" title="¿Qué significa este resultado?">?</button>
     </div>
 
+    @if (showRiskLegend) {
+      <div class="legend-panel">
+        <p class="legend-title">¿Cómo se calcula el resultado general?</p>
+        <p>Combina cuatro factores basados en reglas de ciencias del deporte: frecuencia de entrenamiento, intensidad media (FC), variedad de deportes y días de descanso. Cada factor puntúa de 0 a 100 y se pondera para obtener una puntuación global.</p>
+        <ul>
+          <li><strong class="risk-low">BAJO (0–33)</strong> — Nivel de esfuerzo asumible. Puedes seguir entrenando con normalidad.</li>
+          <li><strong class="risk-medium">MEDIO (34–66)</strong> — Carga moderada. Considera añadir un día de descanso o reducir la intensidad.</li>
+          <li><strong class="risk-high">ALTO (67–100)</strong> — Riesgo elevado de lesión por sobreentrenamiento. Se recomienda reducir volumen o descansar.</li>
+        </ul>
+      </div>
+    }
+
+    <div class="risk-summary">
+      <div class="overall risk-{{ summary.overallLevel }}">
+        <span class="level">{{ translateLevel(summary.overallLevel) }}</span>
+        <span class="score">{{ summary.overallScore }} / 100</span>
+      </div>
+      <p class="generated">Actualizado: {{ summary.generatedAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+    </div>
+
+    <!-- Predicción ML -->
     @if (summary.mlPrediction) {
-      <h2>Predicción ML</h2>
+      <div class="section-header">
+        <h2>Predicción ML</h2>
+        <button class="btn-info" (click)="showMlLegend = !showMlLegend" title="¿Qué es la predicción ML?">?</button>
+      </div>
+
+      @if (showMlLegend) {
+        <div class="legend-panel">
+          <p class="legend-title">¿Qué es la predicción de la red neuronal?</p>
+          <p>Es un modelo de inteligencia artificial (red neuronal 5→2→1) que analiza directamente tus sesiones de entrenamiento, sin reglas predefinidas. Las 5 variables que usa son:</p>
+          <ul>
+            <li><strong>Sesiones/semana</strong> — Frecuencia de entrenamientos en los últimos 7 días.</li>
+            <li><strong>Duración media</strong> — Media de minutos por sesión.</li>
+            <li><strong>Variedad de deportes</strong> — Distintos deportes practicados en 14 días. Más variedad = menos riesgo.</li>
+            <li><strong>Días consecutivos</strong> — Máximo de días seguidos entrenando sin descanso.</li>
+            <li><strong>Ratio de carga</strong> — Minutos esta semana vs la semana anterior. Un aumento brusco eleva el riesgo.</li>
+          </ul>
+          <p>El resultado complementa al score general: si ambos coinciden en ALTO, la señal es más fiable.</p>
+        </div>
+      }
+
       <div class="ml-prediction risk-{{ summary.mlPrediction.level }}">
-        <span class="level">{{ summary.mlPrediction.level | uppercase }}</span>
+        <span class="level">{{ translateLevel(summary.mlPrediction.level) }}</span>
         <span class="score">{{ summary.mlPrediction.score }} / 100</span>
       </div>
     }
 
+    <!-- Factores -->
     <h2>Factores de riesgo</h2>
     <ul class="factors">
       @for (factor of summary.factors; track factor.id) {
         <li class="factor risk-{{ factor.level }}">
           <span class="label">{{ factor.label }}</span>
           <span class="score">{{ factor.score }}</span>
-          <span class="level">{{ factor.level | uppercase }}</span>
+          <span class="level">{{ translateLevel(factor.level) }}</span>
         </li>
       }
     </ul>
