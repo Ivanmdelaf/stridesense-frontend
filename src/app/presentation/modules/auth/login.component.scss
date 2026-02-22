@@ -6,6 +6,13 @@
   min-height: 100vh;
   padding: 2rem;
 
+  .app-logo {
+    width: 240px;
+    height: 240px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+  }
+
   h1 {
     margin-bottom: 2rem;
     font-size: 1.75rem;

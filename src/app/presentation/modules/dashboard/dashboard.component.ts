@@ -4,7 +4,7 @@ import { DecimalPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SessionsState, LoadSessions, ClearSessions } from '../../state/sessions.state';
 import { RiskState, LoadRisk, ClearRisk } from '../../state/risk.state';
-import { Logout } from '../../state/user.state';
+import { Logout, UserState } from '../../state/user.state';
 import { Session } from '../../../domain/entities/session.entity';
 
 @Component({
@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
 
+  currentUser = this.store.selectSignal(UserState.user);
   sessions = this.store.selectSignal(SessionsState.sessions);
   sessionsLoading = this.store.selectSignal(SessionsState.loading);
   riskSummary = this.store.selectSignal(RiskState.summary);
@@ -85,6 +86,16 @@ export class DashboardComponent implements OnInit {
     if (level === 'medium') return '#ffb836';
     return '#34c759';
   });
+
+  private readonly LEVEL_ES: Record<string, string> = {
+    low: 'Bajo',
+    medium: 'Medio',
+    high: 'Alto',
+  };
+
+  translateLevel(level: string): string {
+    return this.LEVEL_ES[level] ?? level;
+  }
 
   logout(): void {
     this.store.dispatch([new Logout(), new ClearSessions(), new ClearRisk()]);
