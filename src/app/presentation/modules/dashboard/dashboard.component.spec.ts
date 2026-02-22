@@ -1,4 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { NEVER } from 'rxjs';
 import { provideRouter } from '@angular/router';
 import { provideStore, Store } from '@ngxs/store';
 import { DashboardComponent } from './dashboard.component';
@@ -8,8 +9,10 @@ import { RiskState, SetRisk } from '../../state/risk.state';
 import { Session } from '../../../domain/entities/session.entity';
 import { RiskSummary } from '../../../domain/entities/risk.entity';
 import { USER_REPOSITORY } from '../../../domain/repositories/user.repository';
+import { SESSION_REPOSITORY } from '../../../domain/repositories/session.repository';
+import { RISK_REPOSITORY } from '../../../domain/repositories/risk.repository';
 
-const mockRepo = {
+const mockUserRepo = {
   login: vi.fn(),
   register: vi.fn(),
   getProfile: vi.fn(),
@@ -26,6 +29,7 @@ const mockRisk: RiskSummary = {
   overallScore: 62,
   overallLevel: 'medium',
   factors: [],
+  mlPrediction: { score: 55, level: 'medium' },
   generatedAt: '2026-02-15T10:00:00Z',
 };
 
@@ -40,7 +44,18 @@ describe('DashboardComponent', () => {
       providers: [
         provideStore([UserState, SessionsState, RiskState]),
         provideRouter([]),
-        { provide: USER_REPOSITORY, useValue: mockRepo },
+        { provide: USER_REPOSITORY, useValue: mockUserRepo },
+        {
+          provide: SESSION_REPOSITORY,
+          useValue: {
+            getAll: vi.fn().mockReturnValue(NEVER),
+            getById: vi.fn().mockReturnValue(NEVER),
+            create: vi.fn().mockReturnValue(NEVER),
+            update: vi.fn().mockReturnValue(NEVER),
+            delete: vi.fn().mockReturnValue(NEVER),
+          },
+        },
+        { provide: RISK_REPOSITORY, useValue: { getSummary: vi.fn().mockReturnValue(NEVER) } },
       ],
     }).compileComponents();
 
@@ -72,7 +87,7 @@ describe('DashboardComponent', () => {
 
     const level = fixture.nativeElement.querySelector('.risk-card__level');
     expect(level).toBeTruthy();
-    expect(level.textContent.trim()).toBe('medium');
+    expect(level.textContent.trim()).toBe('Medio');
     expect(level.classList.contains('risk-medium')).toBe(true);
   });
 
@@ -90,8 +105,9 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
+    // 2 outer circles (background + progress) + 2 inner ML circles = 4 total
     const circles = fixture.nativeElement.querySelectorAll('.donut circle');
-    expect(circles.length).toBe(2);
+    expect(circles.length).toBe(4);
   });
 
   it('should show latest session metrics when sessions loaded', async () => {

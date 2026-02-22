@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { NEVER } from 'rxjs';
 import { provideStore, Store } from '@ngxs/store';
 import {
   RiskState,
@@ -8,6 +9,7 @@ import {
   SetRiskError,
 } from './risk.state';
 import { RiskSummary } from '../../domain/entities/risk.entity';
+import { RISK_REPOSITORY } from '../../domain/repositories/risk.repository';
 
 const mockSummary: RiskSummary = {
   overallScore: 72,
@@ -16,6 +18,7 @@ const mockSummary: RiskSummary = {
     { id: 'f1', label: 'Carga de entrenamiento', score: 80, level: 'high' },
     { id: 'f2', label: 'Descanso', score: 60, level: 'medium' },
   ],
+  mlPrediction: { score: 60, level: 'medium' },
   generatedAt: '2026-02-15T10:00:00Z',
 };
 
@@ -24,7 +27,10 @@ describe('RiskState', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideStore([RiskState])],
+      providers: [
+        provideStore([RiskState]),
+        { provide: RISK_REPOSITORY, useValue: { getSummary: vi.fn().mockReturnValue(NEVER) } },
+      ],
     });
     store = TestBed.inject(Store);
   });
