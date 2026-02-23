@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: stridesense-frontend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: frankfurt
+    plan: free
+    envVars:
+      - key: BACKEND_URL
+        value: https://stridesense-backend.onrender.com
