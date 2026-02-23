@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthCredentials, AuthToken, RegisterCredentials, User } from '../../domain/entities/user.entity';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class AuthDatasource {
-  private readonly base = '/api/auth';
+  private readonly base = `${environment.apiUrl}/auth`;
 
   constructor(private readonly http: HttpClient) {}
 
